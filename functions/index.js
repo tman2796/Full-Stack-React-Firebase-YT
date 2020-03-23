@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin')
 
-var serviceAccount = require("./ServiceAccountKey/socialape-41891-firebase-adminsdk-g4grm-c7847520a1.json");
+var serviceAccount = require("./socialape-41891-firebase-adminsdk-g4grm-c7847520a1.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),

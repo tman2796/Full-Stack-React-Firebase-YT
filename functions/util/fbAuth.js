@@ -1,7 +1,7 @@
 const {
-    admin
+    admin,
+    db
 } = require('./admin')
-
 
 module.exports = (req, res, next) => {
     let idToken;
@@ -14,11 +14,13 @@ module.exports = (req, res, next) => {
             error: 'Unauthorized'
         });
     }
-    admin.auth().verifyIdToken(idToken)
+    admin
+        .auth()
+        .verifyIdToken(idToken)
         .then(decodedToken => {
             req.user = decodedToken;
-            console.log(decodedToken)
-            return db.collection('users')
+            return db
+                .collection('users')
                 .where('userId', '==', req.user.uid)
                 .limit(1)
                 .get();

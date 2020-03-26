@@ -4,9 +4,9 @@ const app = require('express')();
 
 const FBAuth = require('./util/fbAuth');
 
-// const {
-//     db
-// } = require('./util/admin');
+const {
+    db
+} = require('./util/admin');
 
 const {
     getAllScreams,
@@ -22,7 +22,9 @@ const {
     login,
     uploadImage,
     addUserDetails,
-    getAuthenticatedUser
+    getAuthenticatedUser,
+    getUserDetails,
+    markNotificationsRead
 } = require('./handlers/users')
 
 //Scream routes
@@ -46,12 +48,13 @@ app.post('/login', login);
 app.post('/user/image', FBAuth, uploadImage);
 app.get('/user', FBAuth, getAuthenticatedUser);
 app.post('/user', FBAuth, addUserDetails);
+app.get('/user/:handle', getUserDetails);
+app.post('/notifications', FBAuth, markNotificationsRead)
 // https://baseurl.com/api/screams -- good practice
 
 exports.api = functions.https.onRequest(app);
 
 exports.createNotificationOnLike = functions
-    .region('us-central1')
     .firestore.document('likes/{id}')
     .onCreate((snapshot) => {
         db.doc(`/screams/${snapshot.data().screamId}`)

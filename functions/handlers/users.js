@@ -21,7 +21,7 @@ exports.signup = (req, res) => {
         email: req.body.email,
         password: req.body.password,
         confirmPassword: req.body.confirmPassword,
-        handle: req.body.handle,
+        handle: req.body.handle
     };
     const {
         valid,
@@ -36,12 +36,13 @@ exports.signup = (req, res) => {
 
     let token, userId;
 
-    db.doc(`/user/${newUser.handle}`).get()
-        .then(doc => {
+    db.doc(`/users/${newUser.handle}`)
+        .get()
+        .then((doc) => {
             if (doc.exists) {
                 return res.status(400).json({
                     handle: 'this handle is already taken'
-                })
+                });
             } else {
                 return firebase
                     .auth()
@@ -96,7 +97,8 @@ exports.login = (req, res) => {
 
     if (!valid) return res.status(400).json(errors)
 
-    firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+    firebase.auth()
+        .signInWithEmailAndPassword(user.email, user.password)
         .then(data => {
             return data.user.getIdToken();
         })
